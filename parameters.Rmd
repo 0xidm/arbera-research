@@ -1,0 +1,48 @@
+---
+title: "Arbera Parameters"
+author: "idm"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library("gg3D")
+```
+
+```{r}
+df = read.csv('var/result.csv', header=FALSE)
+names(df) = c(
+  "burn_fee",
+  "wrap_fee",
+  "unwrap_fee",
+  "partner_fee",
+  "cbr",
+  "rewards",
+  "peas_fee_balance",
+  "token0_wrapped_supply",
+  "token0_balance",
+  "partner_fee_balance",
+  "burn_fee_balance"
+)
+```
+
+```{r}
+ggplot(data=df %>% filter(cbr<5), aes(x=burn_fee, y=wrap_fee, z=unwrap_fee, color=cbr, alpha=0.0001)) +
+  ggtitle("CBR produced by iterating (burn_fee, wrap_fee)", subtitle="Dots are partly transparent; darker dots mean values are more common.") +
+  xlab("Burn fee (%)") +
+  ylab("Wrap fee (%)") +
+  theme_void() +
+  axes_3D(theta=15, phi=15) +
+  stat_3D(theta=15, phi=15)
+```
+
+```{r}
+ggplot(data=df %>% filter(cbr<5) %>% filter(unwrap_fee==2), aes(x=burn_fee, y=wrap_fee, size=cbr)) +
+  geom_point(alpha=0.1) +
+  ggtitle("CBR produced by iterating (burn_fee, wrap_fee, unwrap_fee=2%)", subtitle="Dots are partly transparent; darker dots mean values are more common.") +
+  xlab("Burn fee (%)") +
+  ylab("Wrap fee (%)") +
+  theme_bw()
+```
