@@ -44,7 +44,7 @@ def run_one(iteration, wrap_fee, unwrap_fee, buy_fee, sell_fee, protocol_fee, pa
         burn_fee=burn_fee,
     )
 
-    for operation in generate_activity(50):
+    for operation in generate_activity(200):
         pod.handle(operation)
         pod.tick()
 
